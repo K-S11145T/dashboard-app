@@ -3,6 +3,9 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 const router = express.Router();
+const cors = require("cors");
+
+app.use(cors());
 
 router.post("/register", async (req, res) => {
   try {

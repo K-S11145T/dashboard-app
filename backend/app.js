@@ -5,7 +5,7 @@ require("dotenv").config();
 require("./config/db");
 const app = express();
 
-app.use(cors({ origin: "https://dashboard-app-beige-nu.vercel.app/" }));
+app.use(cors());
 
 app.use(express.json());
 
