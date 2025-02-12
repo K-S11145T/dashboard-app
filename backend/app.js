@@ -5,9 +5,8 @@ require("dotenv").config();
 require("./config/db");
 const app = express();
 
-app.use(
-  app.use(cors({ origin: 'https://dashboard-app-kohl-three.vercel.app/' }))
-);
+app.use(cors({ origin: "https://dashboard-app-kohl-three.vercel.app/" }));
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
