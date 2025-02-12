@@ -6,10 +6,7 @@ require("./config/db");
 const app = express();
 
 app.use(
-  cors({
-    origin: ["http://localhost:3000" , "http://localhost:5173"],
-    credentials: true,
-  })
+  app.use(cors({ origin: 'https://dashboard-qucp65bub-tanush-singhs-projects.vercel.app/' }))
 );
 app.use(express.json());
 
