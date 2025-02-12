@@ -7,7 +7,7 @@ const Logout = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:5000/api/users/logout", { withCredentials: true });
+      await axios.get("REACT_APP_BACKEND_URL/api/users/logout", { withCredentials: true });
       localStorage.removeItem("token");
       navigate("/login");
     } catch (err) {
