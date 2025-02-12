@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
     try {
       
-      let response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, {
+      let response = await axios.post(`https://dashboard-app-fj5f.onrender.com/api/users/login`, {
         email,
         password,
       });

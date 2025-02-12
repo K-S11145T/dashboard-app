@@ -22,7 +22,7 @@ function Dashboard() {
       }
 
       try {
-        let response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/users/dashboard`, {
+        let response = await axios.get(`https://dashboard-app-fj5f.onrender.com/api/users/dashboard`, {
           headers: {
             Authorization: `Bearer ${token}`
           },
