@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -7,15 +7,17 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+ 
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      console.log("Backend URL:", process.env.REACT_APP_BACKEND_URL);
+      
       let response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, {
         email,
         password,
       });
+      
       localStorage.setItem("token", response.data.token);
       navigate("/dashboard");
     } catch (err) {
