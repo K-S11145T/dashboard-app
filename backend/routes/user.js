@@ -6,13 +6,22 @@ const cors = require("cors");
 
 const router = express.Router();
 
-
 const corsOptions = {
-  origin: 'https://dashboard-app-beige-nu.vercel.app', 
-  methods: 'GET,POST,PUT,DELETE', 
-  credentials: true,  
+  origin: [
+    'https://dashboard-app-beige-nu.vercel.app',
+    'http://localhost:3000',
+    'http://localhost:5173'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'],
+  exposedHeaders: ['*', 'Authorization'],
+  maxAge: 600
 };
 router.use(cors(corsOptions));
+
+router.options('*', cors(corsOptions));
+
 require("dotenv").config();
 
 router.post("/register", async (req, res) => {
