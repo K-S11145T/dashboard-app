@@ -1,23 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Logout = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleLogout = async () => {
+    setLoading(true);
     try {
       await axios.get(`https://dashboard-app-fj5f.onrender.com/api/users/logout`, { withCredentials: true });
       localStorage.removeItem("token");
+      setLoading(false);
       navigate("/login");
     } catch (err) {
+      setLoading(false);
+      setError("Failed to log out. Please try again.");
       console.log("Logout Error: ", err.message);
     }
   };
 
   return (
     <div>
-      <button onClick={handleLogout} className="btn cursor-pointer btn-primary">Logout</button>
+      {error && <p className="text-red-600">{error}</p>}
+      <button
+        onClick={handleLogout}
+        className={`btn cursor-pointer btn-primary ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        disabled={loading}
+      >
+        {loading ? 'Logging out...' : 'Logout'}
+      </button>
     </div>
   );
 };

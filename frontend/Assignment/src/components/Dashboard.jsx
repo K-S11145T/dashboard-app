@@ -13,20 +13,20 @@ function Dashboard() {
       const token = localStorage.getItem("token");
 
       if (!token) {
+        alert("You need to login first.");
         navigate("/login");
-        setTimeout(()=>{
-          alert("You need to login first.");
-
-        } , 100)
         return;
       }
 
       try {
-        let response = await axios.get(`https://dashboard-app-fj5f.onrender.com/api/users/dashboard`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        });
+        const response = await axios.get(
+          `https://dashboard-app-fj5f.onrender.com/api/users/dashboard`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setUserData(response.data);
         setLoading(false);
       } catch (err) {

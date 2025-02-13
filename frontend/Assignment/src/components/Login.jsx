@@ -1,4 +1,4 @@
-import React, { useState ,useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -6,35 +6,31 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
- 
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      
-      let response = await axios.post(`https://dashboard-app-fj5f.onrender.com/api/users/login`, {
-        email,
-        password,
-      });
-      
-      localStorage.setItem("token", response.data.token);
-      navigate("/dashboard");
-    } catch (err) {
-      setError(err.response ? err.response.data : "Login Failed");
-    }
+  try {
+    let response = await axios.post(`https://dashboard-app-fj5f.onrender.com/api/users/login`, {
+      email,
+      password,
+    }, {
+      withCredentials: true, // If you're using cookies
+    });
+    localStorage.setItem("token", response.data.token);
+    navigate("/dashboard");
+  } catch (err) {
+    setError(err.response ? err.response.data : "Login Failed");
+  }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 py-7 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md mt-10 w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Welcome Back
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Please sign in to your account
-          </p>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Welcome Back</h2>
+          <p className="mt-2 text-center text-sm text-gray-600">Please sign in to your account</p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div className="rounded-md shadow-sm space-y-4">
@@ -76,9 +72,10 @@ function Login() {
 
           <button
             type="submit"
-            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            disabled={loading}
+            className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200`}
           >
-            Sign in
+            {loading ? "Logging in..." : "Sign in"}
           </button>
         </form>
 
