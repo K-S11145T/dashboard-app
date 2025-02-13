@@ -13,12 +13,17 @@ function Register() {
     e.preventDefault();
     
     try {
-      const response = await axios.post(`https://dashboard-app-fj5f.onrender.com/api/users/register`, {
-        name,
-        email,
-        password,
-      });
-
+      const response = await axios.post(
+        'https://dashboard-app-fj5f.onrender.com/api/users/register',
+        {
+          name,
+          email,
+          password,
+        },
+        {
+          withCredentials: true, 
+        }
+      );
       console.log("Registered Successfully");
       localStorage.setItem("token", response.data.token);
       navigate("/dashboard"); 

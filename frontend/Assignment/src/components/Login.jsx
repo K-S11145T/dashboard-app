@@ -16,7 +16,7 @@ function Login() {
       email,
       password,
     }, {
-      withCredentials: true, // If you're using cookies
+      withCredentials: true, 
     });
     localStorage.setItem("token", response.data.token);
     navigate("/dashboard");

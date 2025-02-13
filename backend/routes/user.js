@@ -6,31 +6,31 @@ const cors = require("cors");
 
 const router = express.Router();
 
-// CORS middleware lagane ka sahi tareeka (Express app pe lagana hota hai, router pe nahi)
+
 const corsOptions = {
-  origin: 'https://dashboard-app-beige-nu.vercel.app',  // Allow frontend URL
-  methods: 'GET,POST,PUT,DELETE',  // Allowed HTTP methods
-  credentials: true,  // Allow cookies if needed
+  origin: 'https://dashboard-app-beige-nu.vercel.app', 
+  methods: 'GET,POST,PUT,DELETE', 
+  credentials: true,  
 };
 router.use(cors(corsOptions));
+require("dotenv").config();
 
-// ✅ Register API
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Check if user already exists
+
     const existingUser = await userModel.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
 
-    // Hash password
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create new user
+
     const user = await userModel.create({ name, email, password: hashedPassword });
 
-    // Generate token
+
     const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     res.status(201).json({ token, message: "User registered successfully" });
@@ -40,20 +40,19 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// ✅ Login API
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if user exists
+
     const user = await userModel.findOne({ email });
     if (!user) return res.status(400).json({ message: "User not found" });
 
-    // Check password
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid password" });
 
-    // Generate JWT token
+
     const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     res.status(200).json({ token, message: "Logged in successfully" });
@@ -63,13 +62,13 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ✅ Logout API (Improved)
+
 router.post("/logout", (req, res) => {
   res.cookie("token", "", { expires: new Date(0), httpOnly: true });
   res.status(200).json({ message: "Logged out successfully" });
 });
 
-// ✅ Protected Route: Dashboard
+
 router.get("/dashboard", async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
