@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../utils/axios';
 import { useNavigate } from 'react-router-dom';
 
 const Logout = () => {
@@ -10,7 +10,7 @@ const Logout = () => {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      await axios.get(`http://localhost:5000/api/users/logout`, { withCredentials: true }); 
+      await axios.get(`/users/logout`, { withCredentials: true }); 
       localStorage.removeItem("token");
       setLoading(false);
       navigate("/login");

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
@@ -19,7 +19,7 @@ function Dashboard() {
       }
 
       try {
-        const response = await axios.get('http://localhost:5000/api/users/dashboard', {
+        const response = await axios.get('/users/dashboard', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',

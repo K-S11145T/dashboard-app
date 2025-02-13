@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
     try {
       let response = await axios.post(
-        "http://localhost:5000/api/users/login",
+        "/users/login",
         { email, password }
       );
       localStorage.setItem("token", response.data.token);
