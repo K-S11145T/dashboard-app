@@ -7,7 +7,12 @@ const cors = require("cors");
 const router = express.Router();
 
 // CORS middleware lagane ka sahi tareeka (Express app pe lagana hota hai, router pe nahi)
-router.use(cors());
+const corsOptions = {
+  origin: 'https://dashboard-app-beige-nu.vercel.app',  // Allow frontend URL
+  methods: 'GET,POST,PUT,DELETE',  // Allowed HTTP methods
+  credentials: true,  // Allow cookies if needed
+};
+router.use(cors(corsOptions));
 
 // ✅ Register API
 router.post("/register", async (req, res) => {

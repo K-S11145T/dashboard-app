@@ -26,7 +26,7 @@ const Logout = () => {
       {error && <p className="text-red-600">{error}</p>}
       <button
         onClick={handleLogout}
-        className={`btn cursor-pointer btn-primary ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`btn cursor-pointer text-white btn-primary ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
         disabled={loading}
       >
         {loading ? 'Logging out...' : 'Logout'}
