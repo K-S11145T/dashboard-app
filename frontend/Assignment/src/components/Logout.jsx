@@ -10,7 +10,7 @@ const Logout = () => {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      await axios.get(`https://dashboard-app-fj5f.onrender.com/api/users/logout`, { withCredentials: true });
+      await axios.get(`http://localhost:5000/api/users/logout`, { withCredentials: true }); 
       localStorage.removeItem("token");
       setLoading(false);
       navigate("/login");

@@ -11,19 +11,16 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  try {
-    let response = await axios.post('https://dashboard-app-fj5f.onrender.com/api/users/login', data, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://dashboard-app-beige-nu.vercel.app'
-      }
-    });
-    localStorage.setItem("token", response.data.token);
-    navigate("/dashboard");
-  } catch (err) {
-    setError(err.response ? err.response.data : "Login Failed");
-  }
+    try {
+      let response = await axios.post(
+        "http://localhost:5000/api/users/login",
+        { email, password }
+      );
+      localStorage.setItem("token", response.data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.response ? err.response.data.message : "Login Failed");
+    }
   };
 
   return (

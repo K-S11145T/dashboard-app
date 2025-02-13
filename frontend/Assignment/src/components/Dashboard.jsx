@@ -13,24 +13,30 @@ function Dashboard() {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        alert("You need to login first.");
+        setError("Authentication required");
         navigate("/login");
         return;
       }
 
       try {
-        const response = await axios.get(
-          `https://dashboard-app-fj5f.onrender.com/api/users/dashboard`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setUserData(response.data);
-        setLoading(false);
+        const response = await axios.get('http://localhost:5000/api/users/dashboard', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true
+        });
+
+        if (response.data) {
+          setUserData(response.data);
+        }
       } catch (err) {
-        setError("Failed to fetch data");
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }
+        setError(err.response?.data?.message || "Failed to fetch data");
+      } finally {
         setLoading(false);
       }
     };
@@ -38,25 +44,51 @@ function Dashboard() {
     fetchData();
   }, [navigate]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 py-7 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md mt-10 w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Dashboard
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            This is the dashboard page.
-          </p>
-        </div>
-        {userData && (
-          <div>
-            <p>Name: {userData.name}</p>
-            <p>Email: {userData.email}</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
+      <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
+        {error ? (
+          <div className="text-center">
+            <p className="text-red-600">{error}</p>
+            <button 
+              onClick={() => navigate('/login')}
+              className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              Back to Login
+            </button>
           </div>
+        ) : (
+          <>
+            <div>
+              <h2 className="text-center text-3xl font-bold text-gray-900">
+                Welcome, {userData?.name}!
+              </h2>
+              <p className="mt-2 text-center text-gray-600">Your Profile Details</p>
+            </div>
+            
+            {userData && (
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-500">Name</p>
+                  <p className="font-medium">{userData.name}</p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-500">Email</p>
+                  <p className="font-medium">{userData.email}</p>
+                </div>
+              </div>
+            )}
+            
+            
+          </>
         )}
       </div>
     </div>
