@@ -14,9 +14,20 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
+const allowedOrigins = [
+  "https://dashboard-iewisyc8n-tanush-singhs-projects.vercel.app",
+  "https://dashboard-app-beige-nu.vercel.app",
+];
+
 app.use(
   cors({
-    origin: ["https://dashboard-iewisyc8n-tanush-singhs-projects.vercel.app","https://dashboard-app-beige-nu.vercel.app/"] ,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
