@@ -31,7 +31,7 @@ function Login() {
           <p className="mt-2 text-center text-sm text-gray-600">Please sign in to your account</p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-          <div className="rounded-md shadow-sm space-y-4">
+          <div className="rounded-md  space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address

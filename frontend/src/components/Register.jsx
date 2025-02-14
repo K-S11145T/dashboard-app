@@ -44,7 +44,7 @@ function Register() {
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleRegister}>
-          <div className="rounded-md shadow-sm space-y-4">
+          <div className="rounded-md space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Name
