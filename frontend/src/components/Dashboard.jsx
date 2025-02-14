@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "../utils/axios";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,14 +13,8 @@ function Dashboard() {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        toast.error("Authentication required!", {
-          position: "top-center",
-          autoClose:1000,
-        });
-        setTimeout(() => {
-          navigate('/login');
-
-        },1000)
+        setError("Authentication required");
+        navigate("/login");
         return;
       }
 
@@ -40,26 +33,9 @@ function Dashboard() {
       } catch (err) {
         if (err.response?.status === 401 || err.response?.status === 403) {
           localStorage.removeItem('token');
-          toast.warning("Session expired! Please login again.", {
-            position: "top-center",
-            autoClose:1000,
-          });
-          setTimeout(() => {
-            navigate('/login');
-
-          },1000)
-        } else {
-          toast.error(err.response?.data?.message || "Failed to fetch data", {
-            position: "top-center",
-            autoClose:1000,
-          });
-          setTimeout(() => {
-            navigate('/login');
-
-          },1000)
-          
-          
+          navigate('/login');
         }
+        setError(err.response?.data?.message || "Failed to fetch data");
       } finally {
         setLoading(false);
       }
@@ -78,26 +54,41 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen px-5 flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
-      <ToastContainer />
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
-        <div>
-          <h2 className="text-center text-3xl font-bold text-gray-900">
-            Welcome, {userData?.name}!
-          </h2>
-          <p className="mt-2 text-center text-gray-600">Your Profile Details</p>
-        </div>
-
-        {userData && (
-          <div className="space-y-4">
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-500">Name</p>
-              <p className="font-medium">{userData.name}</p>
-            </div>
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-500">Email</p>
-              <p className="font-medium">{userData.email}</p>
-            </div>
+        {error ? (
+          <div className="text-center">
+            <p className="text-red-600">{error}</p>
+            <button 
+              onClick={() => navigate('/login')}
+              className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              Back to Login
+            </button>
           </div>
+        ) : (
+          <>
+            <div>
+              <h2 className="text-center text-3xl font-bold text-gray-900">
+                Welcome, {userData?.name}!
+              </h2>
+              <p className="mt-2 text-center text-gray-600">Your Profile Details</p>
+            </div>
+            
+            {userData && (
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-500">Name</p>
+                  <p className="font-medium">{userData.name}</p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-500">Email</p>
+                  <p className="font-medium">{userData.email}</p>
+                </div>
+              </div>
+            )}
+            
+            
+          </>
         )}
       </div>
     </div>
