@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: "https://dashboard-iewisyc8n-tanush-singhs-projects.vercel.app",
+    origin: "https://dashboard-app-beige-nu.vercel.app",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
